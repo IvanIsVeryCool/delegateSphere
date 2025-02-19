@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,11 +24,34 @@
         const analytics = getAnalytics(app);
         const db = getFirestore(app);
 
+        async function sendTimestamp() {
+            const messageInput = document.getElementById("message-input");
+            const message = messageInput.value;
+
+            if (!message) {
+                alert("Please enter a message.");
+                return;
+            }
+
+            console.log("Sending timestamp and message...");
+            try {
+                await addDoc(collection(db, "messages"), {
+                    timestamp: Timestamp.now(),
+                    message: message
+                });
+                console.log("Timestamp and message saved to Firebase!");
+                messageInput.value = "";
+                readTimestamps();
+            } catch (error) {
+                console.error("Error adding document: ", error);
+            }
+        }
+
         async function readTimestamps() {
             const timestampQuery = query(collection(db, "messages"), orderBy("timestamp", "desc")); // Query with orderBy in descending order
             const querySnapshot = await getDocs(timestampQuery);
             const timestampList = document.getElementById("timestamp-list");
-            timestampList.innerHTML = ""; // Clear the list before updating
+            timestampList.innerHTML = "";
 
             querySnapshot.forEach((doc) => {
                 const data = doc.data();
@@ -37,14 +61,25 @@
             });
         }
 
+        function showAsk() {
+            document.getElementById("message-input").style.display = "block";
+            document.getElementById("send-button").style.display = "block";
+        }
+
         // Attach the event listener
         document.addEventListener("DOMContentLoaded", () => {
-            readTimestamps(); // Load existing timestamps on page load
+            document.getElementById("send-button").addEventListener("click", sendTimestamp);
+            document.getElementById("ask-button").addEventListener("click", showAsk);
+            readTimestamps();
         });
     </script>
 </head>
+
 <body>
-    <a href="ask.html">Ask question</a>
+    <button id="ask-button">Ask question</button>
+    <input type="text" id="message-input" placeholder="Enter your message here" style="display: none" />
+    <button id="send-button" style="display: none">Send Timestamp</button>
     <div id="timestamp-list"></div>
 </body>
+
 </html>
