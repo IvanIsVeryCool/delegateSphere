@@ -9,6 +9,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-analytics.js";
         import { getFirestore, collection, addDoc, Timestamp, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyASoOAiu4m4tfPUAYXalXCKnDx9uxdgFCc",
@@ -23,7 +24,9 @@
         const app = initializeApp(firebaseConfig);
         const analytics = getAnalytics(app);
         const db = getFirestore(app);
+        const auth = getAuth(app);
 
+        // Function to send the message with timestamp
         async function sendTimestamp() {
             const messageInput = document.getElementById("message-input");
             const message = messageInput.value;
@@ -35,9 +38,12 @@
 
             console.log("Sending timestamp and message...");
             try {
+                const user = auth.currentUser; // Get the currently signed-in user
                 await addDoc(collection(db, "messages"), {
                     timestamp: Timestamp.now(),
-                    message: message
+                    message: message,
+                    uid: user ? user.uid : null, // Store user ID with the message
+                    displayName: user ? user.displayName : null // Store user's display name
                 });
                 console.log("Timestamp and message saved to Firebase!");
                 messageInput.value = "";
@@ -47,6 +53,7 @@
             }
         }
 
+        // Function to read timestamps and display them
         async function readTimestamps() {
             const timestampQuery = query(collection(db, "messages"), orderBy("timestamp", "desc")); // Query with orderBy in descending order
             const querySnapshot = await getDocs(timestampQuery);
@@ -56,15 +63,33 @@
             querySnapshot.forEach((doc) => {
                 const data = doc.data();
                 const timestampElement = document.createElement("div");
-                timestampElement.textContent = `${data.timestamp.toDate().toString()}: ${data.message}`; // Display timestamp and message
+                const initials = data.displayName ? getInitials(data.displayName) : "A"; // Get initials or default to "A"
+                timestampElement.textContent = `${data.timestamp.toDate().toString()} (${initials}): ${data.message}`; // Display timestamp, initials, and message
                 timestampList.appendChild(timestampElement);
             });
         }
 
+        // Function to get initials from a full name
+        function getInitials(fullName) {
+            const names = fullName.split(" ");
+            return names.map(name => name.charAt(0).toUpperCase()).join(""); // Combine initials
+        }
+
+        // Function to show the input field and send button
         function showAsk() {
             document.getElementById("message-input").style.display = "block";
             document.getElementById("send-button").style.display = "block";
         }
+
+        // Check authentication state
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                console.log("User is signed in:", user);
+            } else {
+                console.log("No user is signed in.");
+                window.location.href = "home.html"; // Redirect to home if not signed in
+            }
+        });
 
         // Attach the event listener
         document.addEventListener("DOMContentLoaded", () => {
@@ -72,6 +97,8 @@
             document.getElementById("ask-button").addEventListener("click", showAsk);
             readTimestamps();
         });
+
+        // Refresh timestamps every second
         setInterval(readTimestamps, 1000);
     </script>
 </head>
