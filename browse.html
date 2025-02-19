@@ -63,16 +63,21 @@
             querySnapshot.forEach((doc) => {
                 const data = doc.data();
                 const timestampElement = document.createElement("div");
-                const initials = data.displayName ? getInitials(data.displayName) : "A"; // Get initials or default to "A"
-                timestampElement.textContent = `${data.timestamp.toDate().toString()} (${initials}): ${data.message}`; // Display timestamp, initials, and message
+                const first = data.displayName ? getFirstName(data.displayName) : "A"; // Get initials or default to "A"
+
+                // Format date and time without timezone
+                const date = data.timestamp.toDate().toLocaleDateString(); // Get date
+                const time = data.timestamp.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // Get time without seconds
+                timestampElement.textContent = `${date} ${time} (${first}): ${data.message}`; // Display date, time, initials, and message
                 timestampList.appendChild(timestampElement);
             });
         }
 
+
         // Function to get initials from a full name
-        function getInitials(fullName) {
+        function getFirstName(fullName) {
             const names = fullName.split(" ");
-            return names.map(name => name.charAt(0).toUpperCase()).join(""); // Combine initials
+            return names[0]; // Combine initials
         }
 
         // Function to show the input field and send button
@@ -106,7 +111,7 @@
 <body>
     <button id="ask-button">Ask question</button>
     <input type="text" id="message-input" placeholder="Enter your message here" style="display: none" />
-    <button id="send-button" style="display: none">Send Timestamp</button>
+    <button id="send-button" style="display: none">Ask Question</button>
     <div id="timestamp-list"></div>
 </body>
 
