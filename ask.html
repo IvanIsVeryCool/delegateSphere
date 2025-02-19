@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DelegateSphere</title>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-analytics.js";
+        import { getFirestore, collection, addDoc, Timestamp, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyASoOAiu4m4tfPUAYXalXCKnDx9uxdgFCc",
+            authDomain: "delegatesphere.firebaseapp.com",
+            projectId: "delegatesphere",
+            storageBucket: "delegatesphere.firebasestorage.app",
+            messagingSenderId: "18600072054",
+            appId: "1:18600072054:web:10d32d3699717b384ee057",
+            measurementId: "G-LFDFDVHL05"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getFirestore(app);
+
+        async function sendTimestamp() {
+            const messageInput = document.getElementById("message-input");
+            const message = messageInput.value; // Get the input value
+
+            if (!message) {
+                alert("Please enter a message."); // Simple validation to ensure input is not empty
+                return;
+            }
+
+            console.log("Sending timestamp and message...");
+            try {
+                await addDoc(collection(db, "messages"), {
+                    timestamp: Timestamp.now(), // Store timestamp using Firestore's Timestamp
+                    message: message // Store the user message
+                });
+                console.log("Timestamp and message saved to Firebase!");
+                messageInput.value = ""; // Clear the input field after sending
+                window.location.href = "browse.html";
+            } catch (error) {
+                console.error("Error adding document: ", error);
+            }
+        }
+
+        // Attach the event listener
+        document.addEventListener("DOMContentLoaded", () => {
+            const button = document.getElementById("send-button");
+            button.addEventListener("click", sendTimestamp);
+        });
+    </script>
+</head>
+
+<body>
+    <input type="text" id="message-input" placeholder="Enter your message here" />
+    <button id="send-button">Send Timestamp</button>
+</body>
+
+</html>

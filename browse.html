@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DelegateSphere</title>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-analytics.js";
+        import { getFirestore, collection, addDoc, Timestamp, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyASoOAiu4m4tfPUAYXalXCKnDx9uxdgFCc",
+            authDomain: "delegatesphere.firebaseapp.com",
+            projectId: "delegatesphere",
+            storageBucket: "delegatesphere.firebasestorage.app",
+            messagingSenderId: "18600072054",
+            appId: "1:18600072054:web:10d32d3699717b384ee057",
+            measurementId: "G-LFDFDVHL05"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getFirestore(app);
+
+        async function readTimestamps() {
+            const timestampQuery = query(collection(db, "messages"), orderBy("timestamp", "desc")); // Query with orderBy in descending order
+            const querySnapshot = await getDocs(timestampQuery);
+            const timestampList = document.getElementById("timestamp-list");
+            timestampList.innerHTML = ""; // Clear the list before updating
+
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                const timestampElement = document.createElement("div");
+                timestampElement.textContent = `${data.timestamp.toDate().toString()}: ${data.message}`; // Display timestamp and message
+                timestampList.appendChild(timestampElement);
+            });
+        }
+
+        // Attach the event listener
+        document.addEventListener("DOMContentLoaded", () => {
+            readTimestamps(); // Load existing timestamps on page load
+        });
+    </script>
+</head>
+<body>
+    <a href="ask.html">Ask question</a>
+    <div id="timestamp-list"></div>
+</body>
+</html>
