@@ -26,7 +26,7 @@
         const db = getFirestore(app);
         const auth = getAuth(app);
 
-        async function sendTimestamp() {
+        async function postQuestion() {
             const title = document.getElementById("title-input").value;
             const message = document.getElementById("message-input").value;
 
@@ -47,14 +47,15 @@
                     uid: user ? user.uid : null,
                     displayName: user ? user.displayName : null
                 });
-                messageInput.value = "";
-                readTimestamps();
+                document.getElementById("title-input").value = "";
+                document.getElementById("message-input").value = "";
+                readQuestions();
             } catch (error) {
                 console.log("no workies sad :(");
             }
         }
 
-        async function readTimestamps() {
+        async function readQuestions() {
             const timestampQuery = query(collection(db, "messages"), orderBy("timestamp", "desc"));
             const querySnapshot = await getDocs(timestampQuery);
             const timestampList = document.getElementById("timestamp-list");
@@ -78,6 +79,7 @@
         }
 
         function showAsk() {
+            document.getElementById("ask-button").style.display = "none";
             document.getElementById("title-input").style.display = "block";
             document.getElementById("message-input").style.display = "block";
             document.getElementById("send-button").style.display = "block";
@@ -93,12 +95,12 @@
         });
 
         document.addEventListener("DOMContentLoaded", () => {
-            document.getElementById("send-button").addEventListener("click", sendTimestamp);
+            document.getElementById("send-button").addEventListener("click", postQuestion);
             document.getElementById("ask-button").addEventListener("click", showAsk);
-            readTimestamps();
+            readQuestions();
         });
 
-        setInterval(readTimestamps, 1000);
+        setInterval(readQuestions, 1000);
     </script>
 </head>
 
@@ -106,7 +108,7 @@
     <button id="ask-button">Ask question</button>
     <input type="text" id="title-input" placeholder="Title" style="display: none" />
     <input type="text" id="message-input" placeholder="Body" style="display: none" />
-    <button id="send-button" style="display: none">Ask Question</button>
+    <button id="send-button" style="display: none">Post Question</button>
     <div id="timestamp-list"></div>
 </body>
 
