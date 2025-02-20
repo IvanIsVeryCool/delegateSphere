@@ -26,33 +26,33 @@
         const db = getFirestore(app);
         const auth = getAuth(app);
 
-        async function readQuestions() {
-            const timestampQuery = query(collection(db, "messages"), orderBy("timestamp", "desc"));
-            const querySnapshot = await getDocs(timestampQuery);
-            const timestampList = document.getElementById("timestamp-list");
-            timestampList.innerHTML = "";
+        async function postQuestion() {
+            const title = document.getElementById("title-input").value;
+            const message = document.getElementById("message-input").value;
 
-            querySnapshot.forEach((doc) => {
-                const data = doc.data();
-                const title = document.createElement("h3")
-                const message = document.createElement("p");
-                const timestamp = document.createElement("p");
-                const first = data.displayName ? getFirstName(data.displayName) : "Guest";
+            if (!title) {
+                alert("Please enter a title.")
+                return;
+            } else if (!message) {
+                alert("You can't ask an empty question.");
+                return;
+            }
 
-                const date = data.timestamp.toDate().toLocaleDateString();
-                const time = data.timestamp.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                timestamp.textContent = `${date} ${time} (${first})`;
-                title.textContent = data.title;
-                message.textContent = data.message;
-                timestampList.appendChild(title);
-                timestampList.appendChild(message);
-                timestampList.appendChild(timestamp);
-            });
-        }
-
-        function getFirstName(fullName) {
-            const names = fullName.split(" ");
-            return names[0];
+            try {
+                const user = auth.currentUser;
+                await addDoc(collection(db, "messages"), {
+                    timestamp: Timestamp.now(),
+                    title: title,
+                    message: message,
+                    uid: user ? user.uid : null,
+                    displayName: user ? user.displayName : null
+                });
+                document.getElementById("title-input").value = "";
+                document.getElementById("message-input").value = "";
+                window.location.href="browse.html";
+            } catch (error) {
+                console.log("no workies sad :(");
+            }
         }
 
         onAuthStateChanged(auth, (user) => {
@@ -65,15 +65,15 @@
         });
 
         document.addEventListener("DOMContentLoaded", () => {
-            readQuestions();
+            document.getElementById("send-button").addEventListener("click", postQuestion);
         });
-
-        setInterval(readQuestions, 1000);
     </script>
 </head>
 
 <body>
-    <a href="ask.html" id="ask-button">Ask question</a>
+    <input type="text" id="title-input" placeholder="Title"/>
+    <input type="text" id="message-input" placeholder="Body"/>
+    <button id="send-button">Post Question</button>
     <div id="timestamp-list"></div>
 </body>
 
