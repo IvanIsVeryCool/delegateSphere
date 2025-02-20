@@ -63,13 +63,19 @@
 
             querySnapshot.forEach((doc) => {
                 const data = doc.data();
-                const timestampElement = document.createElement("div");
+                const title = document.createElement("h1")
+                const message = document.createElement("p");
+                const timestamp = document.createElement("p");
                 const first = data.displayName ? getFirstName(data.displayName) : "Guest";
 
                 const date = data.timestamp.toDate().toLocaleDateString();
                 const time = data.timestamp.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                timestampElement.textContent = `${date} ${time} (${first}): ${data.title}`;
-                timestampList.appendChild(timestampElement);
+                timestamp.textContent = `${date} ${time} (${first})`;
+                title.textContent = data.title;
+                message.textContent = data.message;
+                timestampList.appendChild(title);
+                timestampList.appendChild(message);
+                timestampList.appendChild(timestamp);
             });
         }
 
