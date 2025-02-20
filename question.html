@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DelegateSphere</title>
+    <script>
+        function getQueryParams() {
+            const params = new URLSearchParams(window.location.search);
+            return {
+                title: params.get("title"),
+                message: params.get("message"),
+                timestamp: params.get("timestamp"),
+                author: params.get("author")
+            };
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const { title, message, timestamp, author } = getQueryParams();
+            document.getElementById("question-title").textContent = title;
+            document.getElementById("question-message").textContent = message;
+            document.getElementById("question-timestamp").textContent = `${timestamp} (${author})`;
+        });
+    </script>
+</head>
+
+<body>
+    <h1 id="question-title"></h1>
+    <p id="question-message"></p>
+    <p id="question-timestamp"></p>
+    <a href="browse.html">Back to Questions</a>
+</body>
+
+</html>
