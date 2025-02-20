@@ -63,7 +63,7 @@
 
             querySnapshot.forEach((doc) => {
                 const data = doc.data();
-                const title = document.createElement("h1")
+                const title = document.createElement("h3")
                 const message = document.createElement("p");
                 const timestamp = document.createElement("p");
                 const first = data.displayName ? getFirstName(data.displayName) : "Guest";
