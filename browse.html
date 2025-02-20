@@ -26,36 +26,35 @@
         const db = getFirestore(app);
         const auth = getAuth(app);
 
-        // Function to send the message with timestamp
         async function sendTimestamp() {
-            const messageInput = document.getElementById("message-input");
-            const message = messageInput.value;
+            const title = document.getElementById("title-input").value;
+            const message = document.getElementById("message-input").value;
 
-            if (!message) {
-                alert("Please enter a message.");
+            if (!title) {
+                alert("Please enter a title.")
+            } else if (!message) {
+                alert("You can't ask an empty question.");
                 return;
             }
 
-            console.log("Sending timestamp and message...");
             try {
-                const user = auth.currentUser; // Get the currently signed-in user
+                const user = auth.currentUser;
                 await addDoc(collection(db, "messages"), {
                     timestamp: Timestamp.now(),
+                    title: title,
                     message: message,
-                    uid: user ? user.uid : null, // Store user ID with the message
-                    displayName: user ? user.displayName : null // Store user's display name
+                    uid: user ? user.uid : null,
+                    displayName: user ? user.displayName : null
                 });
-                console.log("Timestamp and message saved to Firebase!");
                 messageInput.value = "";
                 readTimestamps();
             } catch (error) {
-                console.error("Error adding document: ", error);
+                console.log("no workies sad :(");
             }
         }
 
-        // Function to read timestamps and display them
         async function readTimestamps() {
-            const timestampQuery = query(collection(db, "messages"), orderBy("timestamp", "desc")); // Query with orderBy in descending order
+            const timestampQuery = query(collection(db, "messages"), orderBy("timestamp", "desc"));
             const querySnapshot = await getDocs(timestampQuery);
             const timestampList = document.getElementById("timestamp-list");
             timestampList.innerHTML = "";
@@ -63,54 +62,49 @@
             querySnapshot.forEach((doc) => {
                 const data = doc.data();
                 const timestampElement = document.createElement("div");
-                const first = data.displayName ? getFirstName(data.displayName) : "A"; // Get initials or default to "A"
+                const first = data.displayName ? getFirstName(data.displayName) : "Guest";
 
-                // Format date and time without timezone
-                const date = data.timestamp.toDate().toLocaleDateString(); // Get date
-                const time = data.timestamp.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // Get time without seconds
-                timestampElement.textContent = `${date} ${time} (${first}): ${data.message}`; // Display date, time, initials, and message
+                const date = data.timestamp.toDate().toLocaleDateString();
+                const time = data.timestamp.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                timestampElement.textContent = `${date} ${time} (${first}): ${data.title}`;
                 timestampList.appendChild(timestampElement);
             });
         }
 
-
-        // Function to get initials from a full name
         function getFirstName(fullName) {
             const names = fullName.split(" ");
-            return names[0]; // Combine initials
+            return names[0];
         }
 
-        // Function to show the input field and send button
         function showAsk() {
+            document.getElementById("title-input").style.display = "block";
             document.getElementById("message-input").style.display = "block";
             document.getElementById("send-button").style.display = "block";
         }
 
-        // Check authentication state
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 console.log("User is signed in:", user);
             } else {
                 console.log("No user is signed in.");
-                window.location.href = "home.html"; // Redirect to home if not signed in
+                window.location.href = "home.html";
             }
         });
 
-        // Attach the event listener
         document.addEventListener("DOMContentLoaded", () => {
             document.getElementById("send-button").addEventListener("click", sendTimestamp);
             document.getElementById("ask-button").addEventListener("click", showAsk);
             readTimestamps();
         });
 
-        // Refresh timestamps every second
         setInterval(readTimestamps, 1000);
     </script>
 </head>
 
 <body>
     <button id="ask-button">Ask question</button>
-    <input type="text" id="message-input" placeholder="Enter your message here" style="display: none" />
+    <input type="text" id="title-input" placeholder="Title" style="display: none" />
+    <input type="text" id="message-input" placeholder="Body" style="display: none" />
     <button id="send-button" style="display: none">Ask Question</button>
     <div id="timestamp-list"></div>
 </body>
