@@ -88,21 +88,6 @@ hr.solid {
     border-radius: 5px;
 }
 
-.signin {
-    display: block;
-    margin: 20px;
-    padding: 20px;
-    font-family: 'Lato', sans-serif;
-    font-weight: 300;
-    font-size: 30px;
-    text-align: center;
-    background: none;
-    background-color: #009edb;
-    border-style: solid;
-    border-color: #F6F7EB;
-    border-radius: 10px;
-}
-
 button {
     max-width: 320px;
     display: flex;
