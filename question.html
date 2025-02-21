@@ -5,22 +5,63 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DelegateSphere</title>
-    <script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-analytics.js";
+        import { getFirestore, collection, doc, addDoc, updateDoc, Timestamp, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyASoOAiu4m4tfPUAYXalXCKnDx9uxdgFCc",
+            authDomain: "delegatesphere.firebaseapp.com",
+            projectId: "delegatesphere",
+            storageBucket: "delegatesphere.firebasestorage.app",
+            messagingSenderId: "18600072054",
+            appId: "1:18600072054:web:10d32d3699717b384ee057",
+            measurementId: "G-LFDFDVHL05"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
         function getQueryParams() {
             const params = new URLSearchParams(window.location.search);
             return {
                 title: params.get("title"),
                 message: params.get("message"),
+                //score: params.get("score"),
                 timestamp: params.get("timestamp"),
                 author: params.get("author")
             };
         }
 
+        /*async function upvote() {
+            const params = new URLSearchParams(window.location.search);
+            const docId = params.get("id");
+
+            if (!docId) {
+                console.error("Document ID not found.");
+                return;
+            }
+
+            const docRef = doc(db, "messages", docId);
+            const score = params.get("score");
+
+            await updateDoc(docRef, { score: parseInt(score) + 1 });
+            document.getElementById("score").textContent = parseInt(document.getElementById("score").textContent) + 1;
+        }*/
+
+
         document.addEventListener("DOMContentLoaded", () => {
-            const { title, message, timestamp, author } = getQueryParams();
+            const { title, message, score, timestamp, author } = getQueryParams();
             document.getElementById("question-title").textContent = title;
             document.getElementById("question-message").textContent = message;
+            //document.getElementById("score").textContent = score;
             document.getElementById("question-timestamp").textContent = `${timestamp} (${author})`;
+            /*document.getElementById("upvote").addEventListener("click", upvote);
+            document.getElementById("downvote").addEventListener("click", downvote);*/
         });
     </script>
 </head>
@@ -28,6 +69,9 @@
 <body>
     <h1 id="question-title"></h1>
     <p id="question-message"></p>
+    <!--<p id="score"></p>
+    <button id="upvote">Upvote</button>
+    <button id="downvote">Downvote</button>-->
     <p id="question-timestamp"></p>
     <a href="browse.html">Back to Questions</a>
 </body>

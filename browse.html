@@ -40,11 +40,15 @@
                 const time = data.timestamp.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
                 const questionLink = document.createElement("a");
-                questionLink.href = `question.html?title=${encodeURIComponent(data.title)}&message=${encodeURIComponent(data.message)}&timestamp=${encodeURIComponent(date + " " + time)}&author=${encodeURIComponent(first)}`;
+                questionLink.href = `question.html?id=${encodeURIComponent(doc.id)}&title=${encodeURIComponent(data.title)}&message=${encodeURIComponent(data.message)}&timestamp=${encodeURIComponent(date + " " + time)}&author=${encodeURIComponent(first)}`;
                 questionLink.textContent = data.title;
+
 
                 const message = document.createElement("p");
                 message.textContent = data.message;
+
+                /*const score = document.createElement("p");
+                score.textContent = data.score;*/
 
                 const timestamp = document.createElement("p");
                 timestamp.textContent = `${date} ${time} (${first})`;
@@ -53,6 +57,7 @@
 
                 listElement.appendChild(questionLink);
                 listElement.appendChild(message);
+                //listElement.appendChild(score);
                 listElement.appendChild(timestamp);
 
                 questionList.appendChild(listElement);
