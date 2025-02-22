@@ -55,7 +55,7 @@
                 score.textContent = data.score;*/
 
                 const timestamp = document.createElement("p");
-                timestamp.innerHTML = `${first} ${owner ? "<b>[Owner]</b>" : ""} asked on ${date} ${time}`;
+                timestamp.innerHTML = `<i>${first}</i> ${owner ? "<b>[Owner]</b>" : ""} asked on ${date} ${time}`;
 
                 const listElement = document.createElement("div");
                 listElement.className = "listElement";

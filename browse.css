@@ -9,17 +9,6 @@ body {
     display: none;
 }
 
-h1 {
-    display: block;
-    margin: 5px;
-    padding: 0;
-    color: #28262C;
-    font-family: 'Lato', sans-serif;
-    font-weight: 500;
-    font-size: 50px;
-    text-align: left;
-}
-
 h2 {
     display: block;
     margin: 20px;
@@ -38,7 +27,7 @@ p {
     color: #28262C;
     font-family: 'Lato', sans-serif;
     font-weight: 300;
-    font-size: 15px;
+    font-size: 20px;
     text-align: left;
 }
 
@@ -49,7 +38,7 @@ a {
     color: #F6F7EB;
     font-family: 'Lato', sans-serif;
     font-weight: 300;
-    font-size: 20px;
+    font-size: 30px;
     text-align: left;
     text-decoration: none;
 }
@@ -66,6 +55,12 @@ button {
     font-size: 20px;
     background-color: #F6F7EB;
     cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background-color: rgba(200, 200, 200);
+    box-shadow: 0 8px 10px rgba(0, 0, 0, 0.2);
 }
 
 .list {
@@ -80,7 +75,7 @@ button {
 
 .listElement {
     margin: 0;
-    padding: 0;
+    padding: 0px;
     display: flex;
     width: 100%;
     flex-direction: column;
@@ -102,7 +97,8 @@ button {
 }
 
 hr.solid {
-    margin: 0px;
+    margin-top: 20px;
+    margin-bottom: 20px;
     padding: 0;
     width: 100%;
     border: 1px solid #F6F7EB;
