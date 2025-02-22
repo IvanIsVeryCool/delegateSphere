@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DelegateSphere</title>
+    <title>Delegate Sphere</title>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-analytics.js";
@@ -35,6 +35,10 @@
             querySnapshot.forEach((doc) => {
                 const data = doc.data();
                 const first = data.displayName ? getFirstName(data.displayName) : "Guest";
+                var owner = false;
+                if (data.uid == "wiNj5ctNRQf9JE18SXMMU3vKxf02" || data.uid == "MlBwZrU7alPejn55o2sxguR5yRP2") {
+                    owner = true;
+                }
 
                 const date = data.timestamp.toDate().toLocaleDateString();
                 const time = data.timestamp.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -51,14 +55,19 @@
                 score.textContent = data.score;*/
 
                 const timestamp = document.createElement("p");
-                timestamp.textContent = `${date} ${time} (${first})`;
+                timestamp.innerHTML = `${first} ${owner ? "<b>[Owner]</b>" : ""} asked on ${date} ${time}`;
 
                 const listElement = document.createElement("div");
+                listElement.className = "listElement";
+
+                const hr = document.createElement("hr");
+                hr.className = "solid";
 
                 listElement.appendChild(questionLink);
                 listElement.appendChild(message);
                 //listElement.appendChild(score);
                 listElement.appendChild(timestamp);
+                listElement.appendChild(hr);
 
                 questionList.appendChild(listElement);
             });
@@ -70,26 +79,40 @@
             return names[0];
         }
 
+        function askQuestion() {
+            window.location.href = "ask.html"
+        }
+
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 console.log("User is signed in:", user);
             } else {
                 console.log("No user is signed in.");
-                window.location.href = "home.html";
+                window.location.href = "index.html";
             }
         });
 
         document.addEventListener("DOMContentLoaded", () => {
             readQuestions();
+            document.getElementById("ask-button").addEventListener("click", askQuestion);
         });
 
         setInterval(readQuestions, 1000);
     </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="browse.css">
 </head>
 
 <body>
-    <a href="ask.html" id="ask-button">Ask question</a>
-    <div id="timestamp-list"></div>
+    <div class="header">
+        <h2>Delegate Sphere</h2>
+    </div>
+    <button id="ask-button">Ask question</button>
+    <div class="list" id="timestamp-list"></div>
 </body>
 
 </html>

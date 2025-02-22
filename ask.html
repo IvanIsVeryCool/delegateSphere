@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DelegateSphere</title>
+    <title>Delegate Sphere</title>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-analytics.js";
@@ -44,7 +44,7 @@
                     timestamp: Timestamp.now(),
                     title: title,
                     message: message,
-                    score: 0,
+                   // score: 0,
                     uid: user ? user.uid : null,
                     displayName: user ? user.displayName : null
                 });
@@ -61,7 +61,7 @@
                 console.log("User is signed in:", user);
             } else {
                 console.log("No user is signed in.");
-                window.location.href = "home.html";
+                window.location.href = "index.html";
             }
         });
 
