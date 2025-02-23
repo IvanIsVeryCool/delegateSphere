@@ -53,7 +53,7 @@ h4 {
     color: #28262C;
     font-family: 'Lato', sans-serif;
     font-weight: 300;
-    font-size: 20px;
+    font-size: 15px;
     text-align: left;
 }
 
@@ -64,7 +64,7 @@ p {
     color: #28262C;
     font-family: 'Lato', sans-serif;
     font-weight: 300;
-    font-size: 30px;
+    font-size: 25px;
     text-align: left;
 }
 
@@ -152,6 +152,7 @@ textarea {
     align-items: flex-start;
     background-color: #F6F7EB;
     position: relative;
+    cursor: pointer;
     transition: all 0.3s ease;
 }
 

@@ -8,7 +8,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-analytics.js";
-        import { getFirestore, collection, doc, addDoc, updateDoc, Timestamp, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore.js";
+        import { getFirestore, collection, doc, addDoc, updateDoc, Timestamp, getDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js";
 
         const firebaseConfig = {
@@ -29,14 +29,26 @@
         function getQueryParams() {
             const params = new URLSearchParams(window.location.search);
             return {
-                title: params.get("title"),
-                message: params.get("message"),
+                id: params.get("id"),
                 //score: params.get("score"),
-                timestamp: params.get("timestamp"),
-                author: params.get("author")
             };
         }
 
+        async function getDocument(docId) {
+            try {
+                const docRef = doc(db, "messages", docId);
+                const docSnap = await getDoc(docRef);
+
+                if (docSnap.exists()) {
+                    return docSnap.data();
+                } else {
+                    console.log("No such document!");
+                    return null;
+                }
+            } catch (error) {
+                console.error("Error getting document:", error);
+            }
+        }
         /*async function upvote() {
             const params = new URLSearchParams(window.location.search);
             const docId = params.get("id");
@@ -53,20 +65,34 @@
             document.getElementById("score").textContent = parseInt(document.getElementById("score").textContent) + 1;
         }*/
 
-        document.addEventListener("DOMContentLoaded", () => {
-            const { title, message, score, timestamp, author } = getQueryParams();
-            document.getElementById("question-title").innerHTML = "<b>" + title + "</b>";
-            document.getElementById("question-message").textContent = message;
-            //document.getElementById("score").textContent = score;
-
-            var owner = false;
-            if (data.uid == "wiNj5ctNRQf9JE18SXMMU3vKxf02" || data.uid == "MlBwZrU7alPejn55o2sxguR5yRP2") {
-                owner = true;
+        document.addEventListener("DOMContentLoaded", async () => {
+            const { id } = getQueryParams();
+            if (!id) {
+                console.error("No document ID provided.");
+                return;
             }
-            document.getElementById("question-timestamp").innerHTML = `<i>${first}</i> ${owner ? "<b>[Owner]</b>" : ""} asked on ${date} ${time}`;
-            /*document.getElementById("upvote").addEventListener("click", upvote);
-            document.getElementById("downvote").addEventListener("click", downvote);*/
+
+            try {
+                const data = await getDocument(id);
+                if (!data) {
+                    document.getElementById("question-title").textContent = "Question not found.";
+                    return;
+                }
+
+                document.getElementById("question-title").innerHTML = `<b>${data.title}</b>`;
+                document.getElementById("question-message").textContent = data.message;
+
+                let owner = data.uid === "wiNj5ctNRQf9JE18SXMMU3vKxf02" || data.uid === "MlBwZrU7alPejn55o2sxguR5yRP2";
+                document.getElementById("question-timestamp").innerHTML = `<i>${data.displayName || "Guest"}</i> ${owner ? "<b>[Owner]</b>" : ""} asked on ${data.timestamp.toDate().toLocaleString()}`;
+            } catch (error) {
+                console.error("Error fetching document:", error);
+            }
+
+            document.getElementById("back").addEventListener("click", () => {
+                window.location.href = "browse.html";
+            });
         });
+
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -80,9 +106,9 @@
     <div class="header">
         <h2>Delegate Sphere</h2>
     </div>
+    <button id="back">Back to Questions</button>
     <div class="margin">
         <div class="question">
-            <a href="browse.html">Back to Questions</a>
             <a id="question-title"></a>
             <p id="question-message"></p>
             <!--<p id="score"></p>
