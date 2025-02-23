@@ -44,8 +44,8 @@
                 const time = data.timestamp.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
                 const questionLink = document.createElement("a");
-                questionLink.href = `question.html?id=${encodeURIComponent(doc.id)}&title=${encodeURIComponent(data.title)}&message=${encodeURIComponent(data.message)}&timestamp=${encodeURIComponent(date + " " + time)}&author=${encodeURIComponent(first)}`;
-                questionLink.textContent = data.title;
+                questionLink.href = `question.html?id=${encodeURIComponent(doc.id)}&title=${encodeURIComponent(data.title)}&message=${encodeURIComponent(data.message)}&timestamp=${encodeURIComponent(date + " " + time)}&first=${encodeURIComponent(first)}`;
+                questionLink.innerHTML = "<b>" + data.title + "</b>";
 
 
                 const message = document.createElement("p");
@@ -54,7 +54,7 @@
                 /*const score = document.createElement("p");
                 score.textContent = data.score;*/
 
-                const timestamp = document.createElement("p");
+                const timestamp = document.createElement("h4");
                 timestamp.innerHTML = `<i>${first}</i> ${owner ? "<b>[Owner]</b>" : ""} asked on ${date} ${time}`;
 
                 const listElement = document.createElement("div");
@@ -67,7 +67,7 @@
                 listElement.appendChild(message);
                 //listElement.appendChild(score);
                 listElement.appendChild(timestamp);
-                listElement.appendChild(hr);
+                //listElement.appendChild(hr);
 
                 questionList.appendChild(listElement);
             });
@@ -104,7 +104,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="browse.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>

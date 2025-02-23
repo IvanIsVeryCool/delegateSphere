@@ -13,7 +13,29 @@ body {
     display: none;
 }
 
+h1 {
+    display: block;
+    margin: 0;
+    padding: 0;
+    color: #28262C;
+    font-family: 'Lato', sans-serif;
+    font-weight: 500;
+    font-size: 50px;
+    text-align: center;
+}
+
 h2 {
+    display: block;
+    margin: 20px;
+    padding: 0;
+    color: #28262C;
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    font-size: 30px;
+    text-align: center;
+}
+
+h3 {
     display: block;
     margin: 20px;
     padding: 0;
@@ -24,7 +46,7 @@ h2 {
     text-align: left;
 }
 
-p {
+h4 {
     display: block;
     margin: 5px;
     padding: 0;
@@ -32,6 +54,17 @@ p {
     font-family: 'Lato', sans-serif;
     font-weight: 300;
     font-size: 20px;
+    text-align: left;
+}
+
+p {
+    display: block;
+    margin: 5px;
+    padding: 0;
+    color: #28262C;
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    font-size: 30px;
     text-align: left;
 }
 
@@ -65,6 +98,35 @@ button {
 button:hover {
     background-color: rgba(200, 200, 200);
     box-shadow: 0 8px 10px rgba(0, 0, 0, 0.2);
+}
+
+
+input {
+    display: block;
+    margin: 20px;
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    color: #28262C;
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    font-size: 20px;
+    background-color: #F6F7EB;
+}
+
+textarea {
+    display: block;
+    margin: 20px;
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    color: #28262C;
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    font-size: 20px;
+    width: 50%;
+    height: 25vh;
+    background-color: #F6F7EB;
 }
 
 .list {
@@ -112,4 +174,51 @@ hr.solid {
     width: 100%;
     border: 1px solid #F6F7EB;
     border-radius: 5px;
+}
+
+.signin {
+    max-width: 320px;
+    display: flex;
+    padding: 0.5rem 1.4rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-weight: 700;
+    text-align: center;
+    text-transform: uppercase;
+    vertical-align: middle;
+    align-items: center;
+    border-radius: 0.5rem;
+    border: none;
+    gap: 0.75rem;
+    color: #28262C;
+    background-color: #F6F7EB;
+    cursor: pointer;
+    transition: all .6s ease;
+}
+
+.signin svg {
+    height: 24px;
+}
+
+.signin:hover {
+    transform: scale(1.1);
+}
+
+.margin {
+    margin: 20px;
+}
+
+.question {
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    width: 100%;
+    border-radius: 30px;
+    border: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    background-color: #F6F7EB;
+    position: relative;
+    transition: all 0.3s ease;
 }

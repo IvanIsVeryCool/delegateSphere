@@ -53,27 +53,44 @@
             document.getElementById("score").textContent = parseInt(document.getElementById("score").textContent) + 1;
         }*/
 
-
         document.addEventListener("DOMContentLoaded", () => {
             const { title, message, score, timestamp, author } = getQueryParams();
-            document.getElementById("question-title").textContent = title;
+            document.getElementById("question-title").innerHTML = "<b>" + title + "</b>";
             document.getElementById("question-message").textContent = message;
             //document.getElementById("score").textContent = score;
-            document.getElementById("question-timestamp").textContent = `${timestamp} (${author})`;
+
+            var owner = false;
+            if (data.uid == "wiNj5ctNRQf9JE18SXMMU3vKxf02" || data.uid == "MlBwZrU7alPejn55o2sxguR5yRP2") {
+                owner = true;
+            }
+            document.getElementById("question-timestamp").innerHTML = `<i>${first}</i> ${owner ? "<b>[Owner]</b>" : ""} asked on ${date} ${time}`;
             /*document.getElementById("upvote").addEventListener("click", upvote);
             document.getElementById("downvote").addEventListener("click", downvote);*/
         });
     </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <h1 id="question-title"></h1>
-    <p id="question-message"></p>
-    <!--<p id="score"></p>
+    <div class="header">
+        <h2>Delegate Sphere</h2>
+    </div>
+    <div class="margin">
+        <div class="question">
+            <a href="browse.html">Back to Questions</a>
+            <a id="question-title"></a>
+            <p id="question-message"></p>
+            <!--<p id="score"></p>
     <button id="upvote">Upvote</button>
     <button id="downvote">Downvote</button>-->
-    <p id="question-timestamp"></p>
-    <a href="browse.html">Back to Questions</a>
+            <h4 id="question-timestamp"></h4>
+        </div>
+    </div>
 </body>
 
 </html>

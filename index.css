@@ -26,17 +26,6 @@ h2 {
     padding: 0;
     color: #28262C;
     font-family: 'Lato', sans-serif;
-    font-weight: 500;
-    font-size: 30px;
-    text-align: left;
-}
-
-p {
-    display: block;
-    margin: 20px;
-    padding: 0;
-    color: #28262C;
-    font-family: 'Lato', sans-serif;
     font-weight: 300;
     font-size: 30px;
     text-align: center;
@@ -89,7 +78,7 @@ hr.solid {
     border-radius: 5px;
 }
 
-button {
+.signin {
     max-width: 320px;
     display: flex;
     padding: 0.5rem 1.4rem;
@@ -109,10 +98,10 @@ button {
     transition: all .6s ease;
 }
 
-.button svg {
+.signin svg {
     height: 24px;
 }
 
-button:hover {
+.signin:hover {
     transform: scale(1.1);
 }
